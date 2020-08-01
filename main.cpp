@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
 
 
         struct ifreq ifr;
-        char lcip[20];
+        char lcip[16];
         int s;
         char mac[18];
         mac[17] ='\0';
