@@ -15,8 +15,8 @@ Ip::operator std::string() const {
 	char buf[32]; // enough size
 	sprintf(buf, "%u.%u.%u.%u",
 		(ip_ & 0xFF000000) >> 24,
-		(ip_ & 0x00FF0000) << 16,
-		(ip_ & 0x0000FF00) >> 8,
+        (ip_ & 0x00FF0000) >> 16,
+        (ip_ & 0x0000FF00) >> 8,
 		(ip_ & 0x000000FF));
 	return std::string(buf);
 }
